@@ -88,40 +88,29 @@ def liveDetection():
 
 @app.route("/detect_objects", methods=['GET'])
 def detectObject():
-    print(cv2.__version__)
     cap = cv2.VideoCapture(0)
-    # box_annotator= sv.BoundingBoxAnnotator(
-    #     thickness=2,
-    #     text_thickness=2,
-    #     text_scale=1
-    # )
-    while cap.isOpened():
-        _, frame = cap.read()
-        # result = model(frame)[0]
-        # detection= sv.Detections.from_ultralytics(result)
+    box_annotator= sv.BoxAnnotator(
+        thickness=2,
+        text_thickness=2,
+        text_scale=1
+    )
+    while True:
+        _,frame = cap.read()
         
-        # frame= box_annotator.annotate(scene=frame,detections=detection)
-       
-
+        result = model(frame)[0]
+        detection= sv.Detections.from_ultralytics(result)
+        
+        frame= box_annotator.annotate(scene=frame,detections=detection)
         cv2.imshow('Camera', frame)
-        cv2.waitKey()
+        
 
         # Check for the 'q' key to exit
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-            # break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-    # Release the camera and close the OpenCV window
     # cap.release()
     # cv2.destroyAllWindows()
     # results = model.predict(source=0, show=True,stream=True)
-    # print(results)
-    # data = request.json
-    # image_data = data.get('image_data')
-    # image_data = image_data.split(",")[1]
-    # decoded_data = bytes(image_data, 'utf-8')
-    # nparr = np.frombuffer(decoded_data, np.uint8)
-    # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    # print('testtt',image_data)
     return "hey"
 
 if __name__ == "__main__":
